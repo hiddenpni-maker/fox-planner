@@ -33,6 +33,44 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Decode & verify Release Keystore (if configured in GitHub Secrets)
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASS }}
+          STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+        run: |
+          CLEAN_B64=$(printf '%s' "$KEYSTORE_B64" | tr -d '[:space:]')
+          CLEAN_ALIAS=$(printf '%s' "$KEY_ALIAS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          CLEAN_STORE_PASS=$(printf '%s' "$STORE_PASS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          CLEAN_KEY_PASS=$(printf '%s' "$KEY_PASS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          if [ -n "$CLEAN_B64" ]; then
+            KEYSTORE_PATH="$RUNNER_TEMP/fox-planner-release.keystore"
+            printf '%s' "$CLEAN_B64" | base64 --decode > "$KEYSTORE_PATH"
+            KEYSTORE_BYTES=$(wc -c < "$KEYSTORE_PATH")
+            echo "Decoded release keystore bytes: $KEYSTORE_BYTES"
+            if [ "$KEYSTORE_BYTES" -lt 1000 ]; then
+              echo "::error::ANDROID_KEYSTORE_BASE64 decoded to only $KEYSTORE_BYTES bytes (expected ~2736 bytes). Re-copy the full Base64 string."
+              exit 1
+            fi
+            if [ -z "$CLEAN_ALIAS" ] || [ -z "$CLEAN_STORE_PASS" ] || [ -z "$CLEAN_KEY_PASS" ]; then
+              echo "::error::One of ANDROID_KEY_ALIAS, ANDROID_KEYSTORE_PASS, or ANDROID_KEY_PASS is empty."
+              exit 1
+            fi
+            keytool -list -keystore "$KEYSTORE_PATH" -alias "$CLEAN_ALIAS" -storepass "$CLEAN_STORE_PASS" > /dev/null
+            printf "ok" > "$RUNNER_TEMP/probe.txt"
+            PROBE_JAR="$RUNNER_TEMP/keystore_probe.jar"
+            jar cf "$PROBE_JAR" -C "$RUNNER_TEMP" probe.txt
+            jarsigner -keystore "$KEYSTORE_PATH" -storepass "$CLEAN_STORE_PASS" -keypass "$CLEAN_KEY_PASS" "$PROBE_JAR" "$CLEAN_ALIAS" > /dev/null
+            rm -f "$PROBE_JAR" "$RUNNER_TEMP/probe.txt"
+            echo "Keystore, alias, and passwords verified cleanly."
+            echo "KEYSTORE_PATH=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+            echo "USE_RELEASE_KEYSTORE=true" >> "$GITHUB_ENV"
+          else
+            echo "No ANDROID_KEYSTORE_BASE64 secret found; falling back to debug signing."
+            echo "USE_RELEASE_KEYSTORE=false" >> "$GITHUB_ENV"
+          fi
+
       - name: Verify pre-installed Android SDK & accept licenses
         run: |
           if [ -z "$ANDROID_HOME" ] && [ -d "/usr/local/lib/android/sdk" ]; then
@@ -57,17 +95,6 @@ jobs:
       - name: Generate Android native project (with ABI splits)
         run: npx expo prebuild --platform android --no-install
 
-      - name: Decode Release Keystore (if configured in GitHub Secrets)
-        env:
-          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        run: |
-          if [ -n "$KEYSTORE_B64" ]; then
-            printf '%s' "$KEYSTORE_B64" | tr -d '[:space:]' | base64 --decode > android/app/release.keystore
-            echo "USE_RELEASE_KEYSTORE=true" >> "$GITHUB_ENV"
-          else
-            echo "USE_RELEASE_KEYSTORE=false" >> "$GITHUB_ENV"
-          fi
-
       - name: Build per-CPU & Universal Release APKs
         working-directory: android
         run: |
@@ -83,6 +110,9 @@ jobs:
           mkdir -p release-apks
           BUILD_TOOLS=$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -n 1 || true)
           echo "Using build-tools: $BUILD_TOOLS"
+          CLEAN_ALIAS=$(printf '%s' "$KEY_ALIAS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          CLEAN_STORE_PASS=$(printf '%s' "$STORE_PASS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          CLEAN_KEY_PASS=$(printf '%s' "$KEY_PASS" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
           for abi in universal arm64-v8a armeabi-v7a x86_64; do
             SRC="android/app/build/outputs/apk/release/app-${abi}-release.apk"
             if [ -f "$SRC" ]; then
@@ -91,10 +121,10 @@ jobs:
                 TMP_ALIGNED="release-apks/aligned-${abi}.apk"
                 "$BUILD_TOOLS/zipalign" -f -p 4 "$SRC" "$TMP_ALIGNED"
                 "$BUILD_TOOLS/apksigner" sign \
-                  --ks android/app/release.keystore \
-                  --ks-key-alias "$KEY_ALIAS" \
-                  --ks-pass "pass:$STORE_PASS" \
-                  --key-pass "pass:$KEY_PASS" \
+                  --ks "$KEYSTORE_PATH" \
+                  --ks-key-alias "$CLEAN_ALIAS" \
+                  --ks-pass "pass:$CLEAN_STORE_PASS" \
+                  --key-pass "pass:$CLEAN_KEY_PASS" \
                   --v1-signing-enabled true \
                   --v2-signing-enabled true \
                   --v3-signing-enabled true \
