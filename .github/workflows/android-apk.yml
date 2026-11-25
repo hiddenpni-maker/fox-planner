@@ -62,7 +62,7 @@ jobs:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
           if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 --decode > android/app/release.keystore
+            printf '%s' "$KEYSTORE_B64" | tr -d '[:space:]' | base64 --decode > android/app/release.keystore
             echo "USE_RELEASE_KEYSTORE=true" >> "$GITHUB_ENV"
           else
             echo "USE_RELEASE_KEYSTORE=false" >> "$GITHUB_ENV"
@@ -70,29 +70,40 @@ jobs:
 
       - name: Build per-CPU & Universal Release APKs
         working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease -PsplitApks=true
+
+      - name: Collect, align & sign APK artifacts
         env:
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEY_PASS: ${{ secrets.ANDROID_KEY_PASS }}
           STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
         run: |
-          chmod +x ./gradlew
-          if [ "$USE_RELEASE_KEYSTORE" = "true" ]; then
-            ./gradlew assembleRelease -PsplitApks=true \
-              -Pandroid.injected.signing.store.file=app/release.keystore \
-              -Pandroid.injected.signing.store.password="$STORE_PASS" \
-              -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
-              -Pandroid.injected.signing.key.password="$KEY_PASS"
-          else
-            ./gradlew assembleRelease -PsplitApks=true
-          fi
-
-      - name: Collect renamed APK artifacts
-        run: |
           mkdir -p release-apks
+          BUILD_TOOLS=$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -n 1 || true)
+          echo "Using build-tools: $BUILD_TOOLS"
           for abi in universal arm64-v8a armeabi-v7a x86_64; do
             SRC="android/app/build/outputs/apk/release/app-${abi}-release.apk"
             if [ -f "$SRC" ]; then
-              cp "$SRC" "release-apks/fox-planner-${abi}.apk"
+              OUT="release-apks/fox-planner-${abi}.apk"
+              if [ "$USE_RELEASE_KEYSTORE" = "true" ]; then
+                TMP_ALIGNED="release-apks/aligned-${abi}.apk"
+                "$BUILD_TOOLS/zipalign" -f -p 4 "$SRC" "$TMP_ALIGNED"
+                "$BUILD_TOOLS/apksigner" sign \
+                  --ks android/app/release.keystore \
+                  --ks-key-alias "$KEY_ALIAS" \
+                  --ks-pass "pass:$STORE_PASS" \
+                  --key-pass "pass:$KEY_PASS" \
+                  --v1-signing-enabled true \
+                  --v2-signing-enabled true \
+                  --v3-signing-enabled true \
+                  --out "$OUT" "$TMP_ALIGNED"
+                rm -f "$TMP_ALIGNED"
+                "$BUILD_TOOLS/apksigner" verify --print-certs "$OUT"
+              else
+                cp "$SRC" "$OUT"
+              fi
             fi
           done
           ls -lh release-apks
