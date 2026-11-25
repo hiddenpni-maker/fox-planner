@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Fox Planner",
+    "slug": "fox-planner",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Fox Planner uses the camera so you can capture photos and study videos inside your notes.",
+        "NSPhotoLibraryUsageDescription": "Fox Planner accesses your photos and videos to attach them to your study notes.",
+        "NSMicrophoneUsageDescription": "Fox Planner uses the microphone when recording study videos inside your notes."
+      }
+    },
+    "android": {
+      "package": "com.foxplanner.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "name": "Fox Planner — پلنر هوشمند مطالعه و تمرکز",
+      "shortName": "Fox Planner",
+      "themeColor": "#F97316",
+      "backgroundColor": "#0B1120"
+    },
+    "plugins": [
+      "./plugins/withAbiSplits",
+      "expo-video",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "اجازه دسترسی به گالری برای افزودن عکس و ویدیو به جزوه‌ها و نوت‌های فاکس پلنر.",
+          "cameraPermission": "اجازه دسترسی به دوربین برای عکس‌برداری و ضبط ویدیوی مطالعه در نوت‌ها."
+        }
+      ],
+      "expo-font",
+      "expo-audio"
+    ]
+  }
+}

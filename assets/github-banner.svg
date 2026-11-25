@@ -1,0 +1,104 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1200" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B131E"/>
+      <stop offset="52%" stop-color="#14222D"/>
+      <stop offset="100%" stop-color="#19162B"/>
+    </linearGradient>
+    <radialGradient id="foxGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#E8915E" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#E8915E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tealGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#5EEAD4" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#5EEAD4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Main Canvas -->
+  <rect width="1200" height="360" rx="28" fill="url(#bgGrad)"/>
+  <rect x="1.5" y="1.5" width="1197" height="357" rx="26.5" stroke="#5EEAD4" stroke-opacity="0.18" stroke-width="1.5"/>
+
+  <!-- Soft Ambient Glows -->
+  <circle cx="965" cy="175" r="190" fill="url(#foxGlow)"/>
+  <circle cx="195" cy="295" r="175" fill="url(#tealGlow)"/>
+
+  <!-- Subtle Geometric Wave & Constellation Accent -->
+  <path d="M-20 305 Q 190 250 420 300 T 870 285 T 1220 315" stroke="#5EEAD4" stroke-opacity="0.14" stroke-width="2" fill="none"/>
+  <path d="M-20 330 Q 250 285 520 325 T 1010 308 T 1220 335" stroke="#E8915E" stroke-opacity="0.14" stroke-width="2" fill="none"/>
+  <circle cx="80" cy="65" r="3" fill="#5EEAD4" fill-opacity="0.45"/>
+  <circle cx="135" cy="95" r="2" fill="#E8915E" fill-opacity="0.55"/>
+  <circle cx="775" cy="58" r="2.5" fill="#C4B5FD" fill-opacity="0.45"/>
+  <circle cx="1118" cy="78" r="3" fill="#5EEAD4" fill-opacity="0.4"/>
+  <circle cx="1140" cy="272" r="2.5" fill="#E8915E" fill-opacity="0.45"/>
+
+  <!-- Cute Fox Paws -->
+  <g opacity="0.15" fill="#E8915E">
+    <ellipse cx="670" cy="72" rx="9" ry="7"/>
+    <circle cx="660" cy="60" r="3"/><circle cx="667" cy="56" r="3"/><circle cx="675" cy="57" r="3"/><circle cx="681" cy="62" r="3"/>
+    <ellipse cx="730" cy="295" rx="9" ry="7"/>
+    <circle cx="720" cy="283" r="3"/><circle cx="727" cy="279" r="3"/><circle cx="735" cy="280" r="3"/><circle cx="741" cy="285" r="3"/>
+  </g>
+
+  <!-- Right Side Fox Emblem Badge -->
+  <g transform="translate(865, 55)">
+    <circle cx="110" cy="115" r="98" fill="#182635" stroke="#E8915E" stroke-opacity="0.45" stroke-width="2"/>
+    <circle cx="110" cy="115" r="112" stroke="#5EEAD4" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="10 10"/>
+    <!-- Ears -->
+    <path d="M58 95 L44 38 L94 64 Z" fill="#E88B53"/>
+    <path d="M162 95 L176 38 L126 64 Z" fill="#E88B53"/>
+    <path d="M63 85 L53 49 L85 66 Z" fill="#7C391D"/>
+    <path d="M157 85 L167 49 L135 66 Z" fill="#7C391D"/>
+    <!-- Head -->
+    <path d="M52 108 C52 70, 168 70, 168 108 C168 148, 134 176, 110 176 C86 176, 52 148, 52 108 Z" fill="#E88B53"/>
+    <path d="M52 114 C56 147, 84 171, 108 175 C94 152, 83 130, 52 114 Z" fill="#FAF3EA"/>
+    <path d="M168 114 C164 147, 136 171, 112 175 C126 152, 137 130, 168 114 Z" fill="#FAF3EA"/>
+    <ellipse cx="110" cy="146" rx="30" ry="24" fill="#FAF3EA"/>
+    <!-- Glasses & Eyes -->
+    <circle cx="84" cy="111" r="7.5" fill="#1E293B"/>
+    <circle cx="136" cy="111" r="7.5" fill="#1E293B"/>
+    <circle cx="81.5" cy="108.5" r="2.6" fill="#FFFFFF"/>
+    <circle cx="133.5" cy="108.5" r="2.6" fill="#FFFFFF"/>
+    <circle cx="84" cy="111" r="16" stroke="#F8FAFC" stroke-width="3.2" fill="rgba(255,255,255,0.08)"/>
+    <circle cx="136" cy="111" r="16" stroke="#F8FAFC" stroke-width="3.2" fill="rgba(255,255,255,0.08)"/>
+    <line x1="100" y1="111" x2="120" y2="111" stroke="#F8FAFC" stroke-width="3.2"/>
+    <!-- Nose & Smile -->
+    <ellipse cx="110" cy="141" rx="9" ry="6.5" fill="#1E293B"/>
+    <path d="M98 156 Q110 166 122 156" stroke="#1E293B" stroke-width="3.8" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Left Side Typography & Pills -->
+  <rect x="74" y="62" width="236" height="32" rx="16" fill="#E8915E" fill-opacity="0.16" stroke="#E8915E" stroke-opacity="0.45"/>
+  <text x="192" y="83" text-anchor="middle" fill="#F3A678" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="700">
+    SMART STUDY &amp; WELLNESS OS
+  </text>
+
+  <text x="74" y="148" fill="#F1F5F9" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="900">
+    Fox Planner
+  </text>
+  <text x="366" y="147" fill="#5EEAD4" font-family="Tahoma, Segoe UI, sans-serif" font-size="38" font-weight="800">
+    فاکس پلنر
+  </text>
+
+  <text x="74" y="192" fill="#B8C5D6" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500">
+    Planner • Jalali Calendar • Pomodoro • Multimedia Notes • Live Analytics
+  </text>
+  <text x="74" y="224" fill="#93C5FD" font-family="Tahoma, Segoe UI, sans-serif" font-size="16" font-weight="600">
+    برنامه‌ریز هوشمند، تایمر پومودورو، جزوه‌برداری عکس و ویدیو، تقویم شمسی و آکادمی آرامش ذهن
+  </text>
+
+  <!-- Bottom Feature Pills -->
+  <g transform="translate(74, 254)">
+    <rect x="0" y="0" width="150" height="36" rx="12" fill="#1C2634" stroke="#5EEAD4" stroke-opacity="0.3"/>
+    <text x="75" y="23" text-anchor="middle" fill="#E2E8F0" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">100% Offline First</text>
+
+    <rect x="164" y="0" width="166" height="36" rx="12" fill="#1C2634" stroke="#E8915E" stroke-opacity="0.35"/>
+    <text x="247" y="23" text-anchor="middle" fill="#E2E8F0" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">FA / EN • RTL Native</text>
+
+    <rect x="344" y="0" width="175" height="36" rx="12" fill="#1C2634" stroke="#C4B5FD" stroke-opacity="0.35"/>
+    <text x="431" y="23" text-anchor="middle" fill="#E2E8F0" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Multi-ABI Android APK</text>
+
+    <rect x="533" y="0" width="192" height="36" rx="12" fill="#1C2634" stroke="#38BDF8" stroke-opacity="0.4"/>
+    <text x="629" y="23" text-anchor="middle" fill="#7DD3FC" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700">Telegram: @otaqe_pni</text>
+  </g>
+</svg>
