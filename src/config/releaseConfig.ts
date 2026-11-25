@@ -10,8 +10,8 @@ export interface GitHubReleaseConfig {
 }
 
 export const RELEASE_CONFIG: GitHubReleaseConfig = {
-  appVersion: '1.0.0',
-  versionCode: 1,
+  appVersion: '1.0.1',
+  versionCode: 2,
   githubOwner: 'hiddenpni-maker',
   githubRepo: 'fox-planner',
 };

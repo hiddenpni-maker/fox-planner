@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
-  "versionCode": 1,
+  "version": "1.0.1",
+  "versionCode": 2,
   "releaseDate": "2026-11-25",
-  "notesFa": "انتشار اولیه فاکس پلنر: پلنر سه‌پنلی با تقویم شمسی و یادآورهای بامزه، پومودورو، نوت چندرسانه‌ای، نمودارهای انیمیشنی، آکادمی تمرکز، ۷ تم طرح‌دار، ۴ فونت فارسی + تغییر سایز متن، ۷ افکت صوتی و قفل PIN.",
-  "notesEn": "Initial release of Fox Planner: 3-panel planner with Jalali calendar & playful reminders, Pomodoro, multimedia notes, animated charts, wellness academy, 7 themes, 4 Persian fonts + text scaler, 7 audio chimes, and PIN lock.",
+  "notesFa": "نسخه ۱.۰.۱: آیکون جدید اختصاصی با ترکیب دم روباه و کتاب + امضای دائمی اختصاصی Release (بدون اخطار Debug).",
+  "notesEn": "Release v1.0.1: Brand-new high-res Fox-Tail & Book app icon plus dedicated production Android Release signing.",
   "downloadPageUrl": "https://github.com/hiddenpni-maker/fox-planner/releases/latest",
   "apkUrls": {
     "universal": "https://github.com/hiddenpni-maker/fox-planner/releases/latest/download/fox-planner-universal.apk",
